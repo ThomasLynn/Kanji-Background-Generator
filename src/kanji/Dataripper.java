@@ -33,8 +33,8 @@ public class Dataripper {
 	 * ayy lamo no comments
 	 */
 	private static int poolSize = 12;
-	public static String[] stems = new String[] { "n5", "n4", "n3", "n2" }; // uncomment this to run a full-scale run
-	//public static String[] stems = new String[] { "ntest" }; // uncomment this to do tests
+	//public static String[] stems = new String[] { "n5", "n4", "n3", "n2" }; // uncomment this to run a full-scale run
+	public static String[] stems = new String[] { "ntest" }; // uncomment this to do tests
 	public static Dimension[] dimensions = new Dimension[] { new Dimension(1280, 720), new Dimension(1920, 1080),
 			new Dimension(2560, 1440), new Dimension(3840, 2160) };
 
