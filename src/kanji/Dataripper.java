@@ -29,20 +29,20 @@ import org.jsoup.select.Elements;
 
 public class Dataripper {
 
+	/**
+	 * ayy lamo no comments
+	 */
 	private static int poolSize = 12;
-	public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
+	public static String[] stems = new String[] { "n5", "n4", "n3", "n2" }; // uncomment this to run a full-scale run
+	//public static String[] stems = new String[] { "ntest" }; // uncomment this to do tests
 	public static Dimension[] dimensions = new Dimension[] { new Dimension(1280, 720), new Dimension(1920, 1080),
 			new Dimension(2560, 1440), new Dimension(3840, 2160) };
-	// public static int width = 1920 * 4;
-	// public static int height = 1080 * 4;
 
 	public static void main(String[] args) throws IOException {
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
 		long ltimer = System.currentTimeMillis();
 		for (String stem : stems) {
 			String inputFileName = stem + ".txt";
-			// System.out.println("URL file: " + inputFileName);
-			// System.out.println("save folder: " + outputFolder);
 			ArrayList<String> urls = new ArrayList<String>();
 			FileReader fileReader = new FileReader(inputFileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -101,7 +101,6 @@ public class Dataripper {
 		}
 		for (Element d : doc.getElementsByClass("row compounds")) {
 			Elements divs = d.getElementsByClass("no-bullet");
-			// System.out.println(divs.html());
 			try {
 				for (Element e : divs.get(0).children()) {
 					onyomi.add(e.text());
