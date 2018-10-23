@@ -19,20 +19,22 @@ public class RipperMain {
 
 	// stems of info used. This determines what txt file to read and what folder to
 	// output to
-	// public static String[] stems = new String[] { "n5", "n4", "n3", "n2" }; //
+	//public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
 	// uncomment this to run a full-scale run
-	public static String[] stems = new String[] { "ntest" }; // uncomment this to do tests
+	public static String[] stems = new String[] { "ntest" };
+	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
 	public static Dimension[] dimensions = new Dimension[] { new Dimension(1280, 720), new Dimension(1920, 1080),
 			new Dimension(2560, 1440), new Dimension(3840, 2160) };
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		
+
 		System.out.println("Thread count: " + poolSize);
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
-		
+
 		long ltimer = System.currentTimeMillis();
+		SyncCounter.resetCounter();
 		for (String stem : stems) {
 			ArrayList<String> urls = new ArrayList<String>();
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(stem + ".txt"));
@@ -44,12 +46,16 @@ public class RipperMain {
 
 			for (String url : urls) {
 				if (url.length() > 0) {
+					SyncCounter.incCounter();
 					executorService.execute(new Worker(stem, url));
 				}
 			}
 		}
 		executorService.shutdown();
-		executorService.awaitTermination(1, TimeUnit.HOURS);
+		while (!executorService.isTerminated()) {
+			System.out.println("Workers remaining: "+SyncCounter.getCounter()+  " time: " + ((System.currentTimeMillis() - ltimer)/1000) + "s");
+			executorService.awaitTermination(10, TimeUnit.SECONDS);
+		}
 		System.out.println("full execution time: " + (System.currentTimeMillis() - ltimer) + "ms");
 	}
 
