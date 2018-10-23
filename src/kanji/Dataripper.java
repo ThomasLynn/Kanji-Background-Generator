@@ -140,15 +140,15 @@ public class Dataripper {
 				g2d.getFont().getSize());
 		drawCenteredString(g2d, pageData.character, rect, g2d.getFont());
 
-		g2d.setFont(new Font("Meiryo", Font.BOLD, scale(height, 0.06)));
+		g2d.setFont(new Font("Times New Roman", Font.PLAIN, scale(height, 0.062)));
 		g2d.drawString(pageData.meaning, scale(height, 1.677777) - g2d.getFontMetrics().stringWidth(pageData.meaning),
 				scale(height, 0.09));
 		g2d.drawString(pageData.meaning, scale(height, 0.1), scale(height, 0.9));
 
-		g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.04)));
+		g2d.setFont(new Font("Times New Roman", Font.PLAIN, scale(height, 0.04)));
 		g2d.drawString("Kun reading compounds", scale(height, 0.79), scale(height, 0.16));
 		drawDef(g2d, pageData.kunyomi, 0.19, height);
-		g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.04)));
+		g2d.setFont(new Font("Times New Roman", Font.PLAIN, scale(height, 0.04)));
 		g2d.drawString("On reading compounds", scale(height, 0.79), scale(height, 0.49));
 		drawDef(g2d, pageData.onyomi, 0.52, height);
 		g2d.dispose();
@@ -166,7 +166,7 @@ public class Dataripper {
 	public static void drawDef(Graphics2D g2d, ArrayList<String> yomi, double startY, int height) {
 		for (int i = 0; i < yomi.size(); i++) {
 			if (yomi.get(i).indexOf("】") < 0) {
-				g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.02)));
+				g2d.setFont(new Font("Times New Roman", Font.PLAIN, scale(height, 0.02)));
 				g2d.drawString(yomi.get(i), scale(height, 0.8), scale(height, startY + 0.028 * i));
 			} else {
 				g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.025)));
