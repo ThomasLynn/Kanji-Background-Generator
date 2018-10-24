@@ -15,7 +15,20 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class ImageMaker {
-	public static void makeImage(PageData pageData, int endWidth, int endHeight, String directory) throws IOException {
+	
+	PageData pageData;
+	int endWidth;
+	int endHeight;
+	String directory;
+	
+	public ImageMaker(PageData pageData, int endWidth, int endHeight, String directory) {
+		this.pageData = pageData;
+		this.endWidth = endWidth;
+		this.endHeight = endHeight;
+		this.directory = directory;
+	}
+	
+	public void makeImage() throws IOException {
 		int width = endWidth;
 		int height = endHeight;
 
@@ -54,11 +67,11 @@ public class ImageMaker {
 		ImageIO.write(bufferedImage, "png", file);
 	}
 
-	public static int scale(int height, double val) {
+	private int scale(int height, double val) {
 		return (int) (height * val);
 	}
 
-	public static void drawDef(Graphics2D g2d, ArrayList<String> yomi, double startY, int height) {
+	private void drawDef(Graphics2D g2d, ArrayList<String> yomi, double startY, int height) {
 		for (int i = 0; i < yomi.size(); i++) {
 			if (yomi.get(i).indexOf("】") < 0) {
 				g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.02)));
@@ -70,7 +83,7 @@ public class ImageMaker {
 		}
 	}
 
-	public static void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+	private void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
 		// Get the FontMetrics
 		FontMetrics metrics = g.getFontMetrics(font);
 		// Determine the X coordinate for the text

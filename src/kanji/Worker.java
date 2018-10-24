@@ -22,7 +22,8 @@ public class Worker implements Runnable {
 			for (Dimension d : RipperMain.dimensions) {
 				String outputFolder = "output/" + d.width + "x" + d.height + "/" + stem + "images";
 				new File(outputFolder).mkdirs();
-				ImageMaker.makeImage(pageData, d.width, d.height, outputFolder);
+				ImageMaker imageMaker = new ImageMaker (pageData, d.width, d.height, outputFolder);
+				imageMaker.makeImage();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

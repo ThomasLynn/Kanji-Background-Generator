@@ -2,6 +2,7 @@ package kanji;
 
 import java.awt.Dimension;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class RipperMain {
 
 	/**
-	 * ayy lamo no comments
+	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
 	private static int poolSize = Runtime.getRuntime().availableProcessors();
@@ -20,9 +21,9 @@ public class RipperMain {
 	// stems of info used. This determines what txt file to read and what folder to
 	// output to
 	//public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
-	public static String[] stems = new String[] { "n1" };
+	//public static String[] stems = new String[] { "n1" };
 	// uncomment this to run a full-scale run
-	//public static String[] stems = new String[] { "ntest" };
+	public static String[] stems = new String[] { "ntest" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
@@ -33,6 +34,8 @@ public class RipperMain {
 
 		System.out.println("Thread count: " + poolSize);
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
+		String cacheFolder = "cache";
+		new File(cacheFolder).mkdirs();
 
 		long ltimer = System.currentTimeMillis();
 		SyncCounter.resetCounter();

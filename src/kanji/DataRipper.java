@@ -11,14 +11,18 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class DataRipper {
-	
+
 	private String url;
-	
+
 	public DataRipper(String url) {
 		this.url = url;
 	}
-	
+
 	public PageData getData() throws MalformedURLException, IOException {
+
+		// String cacheFileLoc = "cache/" + url;
+		// File cacheFile = new File(cacheFileLoc);
+		// if (!cacheFile.exists()) {
 		Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 		String character = "#";
 		String meaning = "can't find character meaning";
