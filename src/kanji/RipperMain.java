@@ -20,8 +20,9 @@ public class RipperMain {
 	// stems of info used. This determines what txt file to read and what folder to
 	// output to
 	//public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
+	public static String[] stems = new String[] { "n1" };
 	// uncomment this to run a full-scale run
-	public static String[] stems = new String[] { "ntest" };
+	//public static String[] stems = new String[] { "ntest" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
