@@ -20,9 +20,9 @@ public class RipperMain {
 
 	// stems of info used. This determines what txt file to read and what folder to
 	// output to
-	//public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
-	//public static String[] stems = new String[] { "n1" };
-	// uncomment this to run a full-scale run
+	// public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
+	// public static String[] stems = new String[] { "n1" };
+	// uncomment this to do a proper run
 	public static String[] stems = new String[] { "ntest" };
 	// uncomment this to do tests
 
@@ -57,7 +57,8 @@ public class RipperMain {
 		}
 		executorService.shutdown();
 		while (!executorService.isTerminated()) {
-			System.out.println("Workers remaining: "+SyncCounter.getCounter()+  " time: " + ((System.currentTimeMillis() - ltimer)/1000) + "s");
+			System.out.println("Workers remaining: " + SyncCounter.getCounter() + " time: "
+					+ ((System.currentTimeMillis() - ltimer) / 1000) + "s");
 			executorService.awaitTermination(10, TimeUnit.SECONDS);
 		}
 		System.out.println("full execution time: " + (System.currentTimeMillis() - ltimer) + "ms");
