@@ -17,14 +17,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class DataRipper {
+public class KanjiMeaningRipper {
 
 	private String url;
 	private String character;
 	private String meaning;
 	private ArrayList<String> words;
 
-	public DataRipper(String url) {
+	public KanjiMeaningRipper(String url) {
 		this.url = url;
 		character = "#";
 		meaning = "can't find character meaning";

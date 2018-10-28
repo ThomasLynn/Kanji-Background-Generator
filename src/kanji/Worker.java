@@ -18,7 +18,7 @@ public class Worker implements Runnable {
 	public void run() {
 		try {
 			// rip data from the webpage
-			PageData pageData = (new DataRipper(url)).getData();
+			PageData pageData = (new KanjiMeaningRipper(url)).getData();
 			for (Dimension d : RipperMain.dimensions) {
 				String outputFolder = "output/" + d.width + "x" + d.height + "/" + stem + "images";
 				new File(outputFolder).mkdirs();
