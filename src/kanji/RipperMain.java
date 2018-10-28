@@ -38,8 +38,19 @@ public class RipperMain {
 		new File(cacheFolder).mkdirs();
 
 		long ltimer = System.currentTimeMillis();
+
+		System.out.println("Reading frequency list file");
+		ArrayList<String> frequentWords = new ArrayList<String>();
+		BufferedReader bufferedReader1 = new BufferedReader(new FileReader("japanese frequent words.txt"));
+		String line1 = null;
+		while ((line1 = bufferedReader1.readLine()) != null) {
+			frequentWords.add(line1);
+		}
+		bufferedReader1.close();
+
 		SyncCounter.resetCounter();
 		for (String stem : stems) {
+			System.out.println("Reading url file");
 			ArrayList<String> urls = new ArrayList<String>();
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(stem + ".txt"));
 			String line = null;

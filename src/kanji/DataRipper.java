@@ -39,26 +39,27 @@ public class DataRipper {
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
 			try {
-				out.write("cache file for "+url+"\n");
+				out.write("cache file for " + url + "\n");
 				Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 				for (Element d : doc.getElementsByClass("character")) {
-					out.write("c="+d.text()+"\n");
+					out.write("c=" + d.text() + "\n");
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
-					out.write("m="+d.text()+"\n");
+					out.write("m=" + d.text() + "\n");
 				}
+
 				for (Element d : doc.getElementsByClass("row compounds")) {
 					Elements divs = d.getElementsByClass("no-bullet");
 					try {
 						for (Element e : divs.get(0).children()) {
-							out.write("o="+e.text()+"\n");
+							out.write("w=" + e.text() + "\n");
 						}
 					} catch (IndexOutOfBoundsException e) {
 
 					}
 					try {
 						for (Element e : divs.get(1).children()) {
-							out.write("k="+e.text()+"\n");
+							out.write("w=" + e.text() + "\n");
 						}
 					} catch (IndexOutOfBoundsException e) {
 
@@ -67,11 +68,10 @@ public class DataRipper {
 			} finally {
 				out.close();
 			}
-			
+
 		}
 		System.out.println("reading cache file");
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
-		meaning = bufferedReader.readLine();
 		String line = null;
 		while ((line = bufferedReader.readLine()) != null) {
 			if (line.startsWith("c=")) {
@@ -80,10 +80,7 @@ public class DataRipper {
 			if (line.startsWith("m=")) {
 				meaning = line.substring(2);
 			}
-			if (line.startsWith("o=")) {
-				words.add(line.substring(2));
-			}
-			if (line.startsWith("k=")) {
+			if (line.startsWith("w=")) {
 				words.add(line.substring(2));
 			}
 		}
