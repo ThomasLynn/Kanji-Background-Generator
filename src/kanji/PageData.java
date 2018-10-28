@@ -5,10 +5,9 @@ import java.util.ArrayList;
 public class PageData{
 	public String character;
 	public String meaning;
-	public ArrayList<String> onyomi;
-	public ArrayList<String> kunyomi;
+	public ArrayList<String> words;
 
-	public PageData(String character, String meaning, ArrayList<String> onyomi, ArrayList<String> kunyomi,
+	public PageData(String character, String meaning, ArrayList<String> words,
 			int onyomiCutSize, int kunyomiCutSize) {
 		this.character = character;
 		String[] meaningList = meaning.split(", ");
@@ -28,10 +27,8 @@ public class PageData{
 			newMeaning = newMeaning.substring(0, newMeaning.length() - 2);
 		}
 		this.meaning = newMeaning;
-		this.onyomi = onyomi;
-		this.kunyomi = kunyomi;
-		processDef(onyomi, onyomiCutSize);
-		processDef(kunyomi, onyomiCutSize);
+		this.words = words;
+		processDef(words, onyomiCutSize);
 	}
 
 	public void processDef(ArrayList<String> yomi, int cutSize) {

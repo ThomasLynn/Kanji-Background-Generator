@@ -15,19 +15,19 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class ImageMaker {
-	
+
 	PageData pageData;
 	int endWidth;
 	int endHeight;
 	String directory;
-	
+
 	public ImageMaker(PageData pageData, int endWidth, int endHeight, String directory) {
 		this.pageData = pageData;
 		this.endWidth = endWidth;
 		this.endHeight = endHeight;
 		this.directory = directory;
 	}
-	
+
 	public void makeImage() throws IOException {
 		int width = endWidth;
 		int height = endHeight;
@@ -54,11 +54,7 @@ public class ImageMaker {
 		g2d.drawString(pageData.meaning, scale(height, 0.1), scale(height, 0.9));
 
 		g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.04)));
-		g2d.drawString("Kun reading compounds", scale(height, 0.79), scale(height, 0.16));
-		drawDef(g2d, pageData.kunyomi, 0.19, height);
-		g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.04)));
-		g2d.drawString("On reading compounds", scale(height, 0.79), scale(height, 0.49));
-		drawDef(g2d, pageData.onyomi, 0.52, height);
+		drawDef(g2d, pageData.words, 0.19, height);
 		g2d.dispose();
 
 		// Save as PNG
