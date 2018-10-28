@@ -42,11 +42,25 @@ public class DataRipper {
 				out.write("cache file for " + url + "\n");
 				Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 				for (Element d : doc.getElementsByClass("character")) {
-					out.write("c=" + d.text() + "\n");
+					String character = d.text();
+					out.write("c=" + character + "\n");
+					String currentWord;
+					int wordCount = 0;
+					for(int i=0;i<RipperMain.frequentWords.size();i++) {
+						currentWord = RipperMain.frequentWords.get(i);
+						if(currentWord.contains(character)) {
+							System.out.println(currentWord);
+							wordCount++;
+						}
+						if(wordCount>=12) {
+							break;
+						}
+					}
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
 					out.write("m=" + d.text() + "\n");
 				}
+				
 
 				for (Element d : doc.getElementsByClass("row compounds")) {
 					Elements divs = d.getElementsByClass("no-bullet");
