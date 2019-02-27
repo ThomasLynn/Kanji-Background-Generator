@@ -28,6 +28,11 @@ public class Worker implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		SyncCounter.decCounter();
 	}
 

@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class PageData{
 	public String character;
 	public String meaning;
-	public ArrayList<String> words;
+	public ArrayList<KanjiWord> words;
 
-	public PageData(String character, String meaning, ArrayList<String> words,
-			int onyomiCutSize, int kunyomiCutSize) {
+	public PageData(String character, String meaning, ArrayList<KanjiWord> words,
+			int onyomiCutSize) {
 		this.character = character;
 		String[] meaningList = meaning.split(", ");
 		String newMeaning = "";
@@ -28,23 +28,23 @@ public class PageData{
 		}
 		this.meaning = newMeaning;
 		this.words = words;
-		processDef(words, onyomiCutSize);
+		//processDef(words, onyomiCutSize);
 	}
 
-	public void processDef(ArrayList<String> yomi, int cutSize) {
-		for (int i = 0; i < yomi.size(); i++) {
+	/*public void processDef(ArrayList<KanjiWord> words, int cutSize) {
+		for (int i = 0; i < words.size(); i++) {
 			for (int j = 0; j < i; j++) {
-				if (yomi.get(i).equals(yomi.get(j))) {
-					yomi.remove(i);
+				if (words.get(i).equals(words.get(j))) {
+					words.remove(i);
 					i--;
 				}
 			}
 		}
-		while (yomi.size() > cutSize) {
-			yomi.remove(cutSize);
+		while (words.size() > cutSize) {
+			words.remove(cutSize);
 		}
-		for (int i = 0; i < yomi.size(); i++) {
-			String nStr = yomi.get(i);
+		for (int i = 0; i < words.size(); i++) {
+			String nStr = words.get(i);
 
 			String info = nStr.substring(nStr.indexOf("】") + 2);
 
@@ -67,17 +67,18 @@ public class PageData{
 				newInfo = tempNewInfo + ", ";
 			}
 			if (newInfo.length() > 0 && nStr.contains(character)) {
-				yomi.set(i, JapaneseCharacter.convertToKatakana(nStr.substring(0, nStr.indexOf("】") + 1)));
+				
+				words.set(i, JapaneseCharacter.convertToKatakana(nStr.substring(0, nStr.indexOf("】") + 1)));
 				i++;
 				if (newInfo.charAt(newInfo.length() - 2) == ',') {
 					newInfo = newInfo.substring(0, newInfo.length() - 2);
 				}
-				yomi.add(i, newInfo);
+				words.add(i, newInfo);
 
 			} else {
-				yomi.remove(i);
+				words.remove(i);
 				i--;
 			}
 		}
-	}
+	}*/
 }

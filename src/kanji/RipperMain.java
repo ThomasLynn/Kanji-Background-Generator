@@ -16,7 +16,8 @@ public class RipperMain {
 	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
-	private static int poolSize = 1;//Runtime.getRuntime().availableProcessors();
+	private static int poolSize = 1;
+	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
 	// stems of info used. This determines what txt file to read and what folder to
 	// output to
@@ -24,6 +25,7 @@ public class RipperMain {
 	// public static String[] stems = new String[] { "n1" };
 	// uncomment this to do a proper run
 	private static String[] stems = new String[] { "ntest" };
+	//private static String[] stems = new String[] { "ntesttiny" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
