@@ -16,7 +16,8 @@ public class RipperMain {
 	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
-	private static int poolSize = 1;
+	public static int poolSize = 1;
+	public static boolean ignorecache = true;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
 	// stems of info used. This determines what txt file to read and what folder to

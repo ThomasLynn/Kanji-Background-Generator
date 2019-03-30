@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class PageData{
 	public String character;
 	public String meaning;
-	public ArrayList<KanjiWord> words;
+	public ArrayList<KanjiSentence> words;
 
-	public PageData(String character, String meaning, ArrayList<KanjiWord> words,
+	public PageData(String character, String meaning, ArrayList<KanjiSentence> words,
 			int onyomiCutSize) {
 		this.character = character;
 		String[] meaningList = meaning.split(", ");

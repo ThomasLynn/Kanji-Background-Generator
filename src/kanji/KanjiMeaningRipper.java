@@ -15,25 +15,26 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class KanjiMeaningRipper {
 
 	private String url;
 	private String character;
 	private String meaning;
-	private ArrayList<KanjiWord> words;
+	private ArrayList<KanjiSentence> words;
 
 	public KanjiMeaningRipper(String url) {
 		this.url = url;
 		character = "#";
 		meaning = "can't find character meaning";
-		words = new ArrayList<KanjiWord>();
+		words = new ArrayList<KanjiSentence>();
 	}
 
 	public PageData getData() throws MalformedURLException, IOException {
 		String cacheFileLoc = "cache/" + url.substring("https://jisho.org/search/".length());
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists()) {
+		if (!cacheFile.exists() || RipperMain.ignorecache) {
 			System.out.println("creating cache file");
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
@@ -43,68 +44,82 @@ public class KanjiMeaningRipper {
 				for (Element d : doc.getElementsByClass("character")) {
 					String character = d.text();
 					out.write("c=" + character + "\n");
-					String currentWord;
 					int wordCount = 0;
-					for (int i = 0; i < RipperMain.frequentWords.size(); i++) {
-						currentWord = RipperMain.frequentWords.get(i);
+					String sentenceURL = "https://tatoeba.org/eng/sentences/search?query=" + character
+							+ "&from=jpn&to=eng";
+					Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
+					for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
+						System.out.println("fleeex: " + japaneseSentence.text());
+					}
+					for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
+						boolean success = true;
+						System.out.println("tESTSETSETETSETS");
+						int type = 0;
+						String japaneseSentence = null;
+						String englishSentence = null;
+						for (Element g : f.getElementsByAttributeValue("layout", "column")) {
+							System.out.println("REEEEEEEEEEEEEEE");
 
-						if (currentWord.contains(character)) {
-							String descURL = "https://jisho.org/word/" + currentWord;
-							String furigana = "furigana goes here";
-							String definition = "";
-							Document descDoc = Jsoup.connect(descURL).get();
-							// Jsoup.
-							// Document descDoc = Jsoup.parse(new URL(descURL).openStream(), "UTF-8",
-							// descURL);
-							for (Element f:descDoc.getElementsByClass("furigana")) {
-								furigana = f.text();
-							}
-							for (Element f : descDoc.getElementsByClass("meaning-wrapper")) {
-								for (Element t : f.getElementsByClass("meaning-meaning")) {
-									String text = t.text();
-									if (text.toLowerCase().charAt(0) == text.charAt(0)) {
-										if (definition.length() != 0) {
-											definition += "; ";
+							for (Element k : g.getElementsByAttributeValue("class", "text")) {
+								System.out.println("firest " + k.text());
+								// String strings = k.text();
+								/*
+								 * String japaneseSentence = strings[0].substring(strings[0].lastIndexOf(" "),
+								 * strings[0].length() - 1); String englishSentence =
+								 * strings[1].substring(strings[1].indexOf(" ", 13), strings[1].length() - 1);
+								 */
+								if (type == 0) {
+									japaneseSentence = k.text();
+								} else {
+									if (englishSentence == null) {
+										englishSentence = k.text();
+										if (englishSentence.length()>70) {
+											success = false;
 										}
-										System.out.println("testses: " + text);
-										if (text.indexOf(";") >= 0) {
-											definition += text.substring(0, text.indexOf(";"));
-										} else {
-											definition += text;
+									} else {
+										String oldSentence = englishSentence;
+										englishSentence += " / " + k.text();
+										if (englishSentence.length()>70) {
+											englishSentence = oldSentence;
 										}
-										System.out.println("testses: " + text);
-										System.out.println("tst: " + definition);
 									}
 								}
+								type += 1;
+								break;
+								// Elements g = f.getElementsByClass("text");
+								// System.out.println(g.getElementsByClass("text"));
+								/*
+								 * String[] strings = k.text().split(" info "); if (strings.length >= 2) {
+								 * String japaneseSentence = strings[0].substring(strings[0].lastIndexOf(" "),
+								 * strings[0].length() - 1); System.out.println(k.text()); if
+								 * (japaneseSentence.contains(character)) { String englishSentence =
+								 * strings[1].substring(strings[1].indexOf(" ", 13), strings[1].length() - 1);
+								 * out.write("w=" + japaneseSentence + "/-/" + englishSentence + "\n"); break;
+								 * }} }
+								 */
 							}
-
-							System.out.println(currentWord);
-							String sentenceURL = "https://tatoeba.org/eng/sentences/search?query=" + currentWord
-									+ "&from=jpn&to=eng";
-							Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
-							for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
-								System.out.println("fleeex: " + japaneseSentence.text());
+							/*
+							 * for (Element k : g.getElementsByAttributeValue("dir", "ltr")) {
+							 * System.out.println("sencond " + k.text()); // String englishSentence =
+							 * strings[1].substring(strings[1].indexOf(" ", 13), // strings[1].length() -
+							 * 1); englishSentence = k.text(); break;
+							 * 
+							 * }
+							 */
+							if (type >= 3) {
+								break;
 							}
-							for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
-								String[] strings = f.text().split(" info ");
-								if (strings.length >= 2) {
-									String japaneseSentence = strings[0].substring(strings[0].lastIndexOf(" "),
-											strings[0].length() - 1);
-									if (japaneseSentence.contains(currentWord)) {
-										System.out.println(f.text());
-										String englishSentence = strings[1].substring(strings[1].indexOf(" ", 13),
-												strings[1].length() - 1);
-										out.write("w=" + currentWord + " 【"+furigana+"】" + "/-/" + definition + "/-/"
-												+ japaneseSentence + "---" + englishSentence + "\n");
-										break;
-									}
-								}
-							}
+						}
+						if (success) {
+							out.write("w=" + japaneseSentence + "/-/" + englishSentence + "\n");
 							wordCount++;
 						}
-						if (wordCount >= 4) {
+						if (wordCount >= 8) {
 							break;
 						}
+					}
+					if (wordCount >= 8) {
+						break;
 					}
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
@@ -130,6 +145,7 @@ public class KanjiMeaningRipper {
 			}
 		}
 		System.out.println("reading cache file");
+
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
 		String line = null;
 		while ((line = bufferedReader.readLine()) != null) {
@@ -141,16 +157,8 @@ public class KanjiMeaningRipper {
 			}
 			if (line.startsWith("w=")) {
 				String[] strings = line.split("/-/");
-				String wordlyword = strings[0].substring(2, strings[0].indexOf("】") + 1);
-				ArrayList<String> japaneseSentences = new ArrayList<String>();
-				ArrayList<String> englishSentences = new ArrayList<String>();
-				for (int i = 2; i < strings.length; i++) {
-					String[] sentences = strings[i].split("---");
-					japaneseSentences.add(sentences[0]);
-					englishSentences.add(sentences[1]);
-				}
+				words.add(new KanjiSentence(strings[0].substring(2), strings[1]));
 
-				words.add(new KanjiWord(wordlyword, strings[1], japaneseSentences, englishSentences));
 			}
 		}
 		bufferedReader.close();

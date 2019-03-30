@@ -67,30 +67,22 @@ public class ImageMaker {
 		return (int) (height * val);
 	}
 
-	private void drawDef(Graphics2D g2d, ArrayList<KanjiWord> kanjiWords, double startY, int height) {
+	private void drawDef(Graphics2D g2d, ArrayList<KanjiSentence> kanjiSentences, double startY, int height) {
 		int line = 0;
-		for (int i = 0; i < kanjiWords.size(); i++) {
-			g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.032)));
-			g2d.drawString(kanjiWords.get(i).word, scale(height, 0.8), scale(height, startY + 0.008 + getLineOffset(line)));
+		for (int i = 0; i < kanjiSentences.size(); i++) {
+			g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.03)));
+			g2d.drawString(kanjiSentences.get(i).japaneseSentences, scale(height, 0.8),
+					scale(height, startY + getLineOffset(line)));
 			line++;
-			g2d.setFont(new Font("Sans-serif", Font.PLAIN, scale(height, 0.028)));
-			g2d.drawString(kanjiWords.get(i).definition, scale(height, 0.8), scale(height, startY + getLineOffset(line)));
+			g2d.setFont(new Font("Sans-serif", Font.PLAIN, scale(height, 0.03)));
+			g2d.drawString(kanjiSentences.get(i).englishSentences, scale(height, 0.8),
+					scale(height, startY + getLineOffset(line)));
 			line++;
-			for (int j = 0; j < kanjiWords.get(i).japaneseSentences.size(); j++) {
-				g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.03)));
-				g2d.drawString(kanjiWords.get(i).japaneseSentences.get(j), scale(height, 0.8),
-						scale(height, startY + getLineOffset(line)));
-				line++;
-				g2d.setFont(new Font("Sans-serif", Font.PLAIN, scale(height, 0.03)));
-				g2d.drawString(kanjiWords.get(i).englishSentences.get(j), scale(height, 0.8),
-						scale(height, startY + getLineOffset(line)));
-				line++;
-			}
 		}
 	}
-	
+
 	private float getLineOffset(int line) {
-		return line*0.042f;
+		return line * 0.042f;
 	}
 
 	private void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
