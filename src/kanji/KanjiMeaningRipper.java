@@ -11,11 +11,12 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class KanjiMeaningRipper {
 
@@ -51,61 +52,56 @@ public class KanjiMeaningRipper {
 					for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
 						System.out.println("fleeex: " + japaneseSentence.text());
 					}
+					List<String> japaneseSentences = new LinkedList<String>();
 					for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
 						boolean success = true;
-						System.out.println("tESTSETSETETSETS");
+						// System.out.println("tESTSETSETETSETS");
 						int type = 0;
 						String japaneseSentence = null;
 						String englishSentence = null;
+						String kanaSentence = null;
+						List<Integer> accent = new LinkedList<Integer>();
 						for (Element g : f.getElementsByAttributeValue("layout", "column")) {
-							System.out.println("REEEEEEEEEEEEEEE");
+							// System.out.println("REEEEEEEEEEEEEEE");
 
 							for (Element k : g.getElementsByAttributeValue("class", "text")) {
-								System.out.println("firest " + k.text());
-								// String strings = k.text();
-								/*
-								 * String japaneseSentence = strings[0].substring(strings[0].lastIndexOf(" "),
-								 * strings[0].length() - 1); String englishSentence =
-								 * strings[1].substring(strings[1].indexOf(" ", 13), strings[1].length() - 1);
-								 */
 								if (type == 0) {
-									japaneseSentence = k.text();
+									boolean hasSimilar = false;
+									System.out.println("starting compare");
+									for (String s : japaneseSentences) {
+										System.out.println("comparing " + k.text() + " :to: " + s);
+										if (areSimilarStrings(k.text(), s)) {
+											System.out.println("clash!");
+											hasSimilar = true;
+											success = false;
+											break;
+										}
+									}
+									if (hasSimilar == false) {
+										japaneseSentence = k.text();
+										japaneseSentences.add(k.text());
+									}
 								} else {
 									if (englishSentence == null) {
 										englishSentence = k.text();
-										if (englishSentence.length()>70) {
+										if (englishSentence.length() > 70) {
 											success = false;
 										}
 									} else {
-										String oldSentence = englishSentence;
-										englishSentence += " / " + k.text();
-										if (englishSentence.length()>70) {
-											englishSentence = oldSentence;
+										if (areSimilarStrings(englishSentence, k.text())) {
+											type--;
+										} else {
+											String oldSentence = englishSentence;
+											englishSentence += " / " + k.text();
+											if (englishSentence.length() > 70) {
+												englishSentence = oldSentence;
+											}
 										}
 									}
 								}
-								type += 1;
+								type++;
 								break;
-								// Elements g = f.getElementsByClass("text");
-								// System.out.println(g.getElementsByClass("text"));
-								/*
-								 * String[] strings = k.text().split(" info "); if (strings.length >= 2) {
-								 * String japaneseSentence = strings[0].substring(strings[0].lastIndexOf(" "),
-								 * strings[0].length() - 1); System.out.println(k.text()); if
-								 * (japaneseSentence.contains(character)) { String englishSentence =
-								 * strings[1].substring(strings[1].indexOf(" ", 13), strings[1].length() - 1);
-								 * out.write("w=" + japaneseSentence + "/-/" + englishSentence + "\n"); break;
-								 * }} }
-								 */
 							}
-							/*
-							 * for (Element k : g.getElementsByAttributeValue("dir", "ltr")) {
-							 * System.out.println("sencond " + k.text()); // String englishSentence =
-							 * strings[1].substring(strings[1].indexOf(" ", 13), // strings[1].length() -
-							 * 1); englishSentence = k.text(); break;
-							 * 
-							 * }
-							 */
 							if (type >= 3) {
 								break;
 							}
@@ -164,5 +160,32 @@ public class KanjiMeaningRipper {
 		bufferedReader.close();
 
 		return new PageData(character, meaning, words, 6);
+	}
+
+	boolean areSimilarStrings(String str1, String str2) {
+		if (str1.length() + 1 == str2.length()) {
+			for (int i = 0; i < str1.length(); i++) {
+				if (str1.charAt(i) != str2.charAt(i)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		if (str1.length() - 1 == str2.length()) {
+			return areSimilarStrings(str2, str1);
+		}
+		if (str1.length() != str2.length()) {
+			return false;
+		}
+		int differences = 0;
+		for (int i = 0; i < str1.length(); i++) {
+			if (str1.charAt(i) != str2.charAt(i)) {
+				if (++differences > 1) {
+					return false;
+				}
+			}
+		}
+		// if the execution is here, then there are 0, or 1 differences, so return true
+		return true;
 	}
 }

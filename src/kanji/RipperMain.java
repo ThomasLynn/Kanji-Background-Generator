@@ -37,6 +37,17 @@ public class RipperMain {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
+		try {
+			PitchAccentPoster poster = new PitchAccentPoster();
+			poster.sendPost("面白そう");
+			System.out.println(poster.getKana());
+			System.out.println("test1");
+			System.out.println(poster.getPitch());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		System.out.println("Reading frequency list file");
 		frequentWords = new ArrayList<String>();
 		BufferedReader bufferedReader1 = new BufferedReader(new FileReader("japanese frequent words.txt"));
