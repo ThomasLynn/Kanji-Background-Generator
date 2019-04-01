@@ -5,10 +5,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,22 +30,27 @@ public class KanjiMeaningRipper {
 		words = new ArrayList<KanjiSentence>();
 	}
 
-	public PageData getData() throws MalformedURLException, IOException {
+	public PageData getData() throws Exception {
 		String cacheFileLoc = "cache/" + url.substring("https://jisho.org/search/".length());
 		File cacheFile = new File(cacheFileLoc);
 		if (!cacheFile.exists() || RipperMain.ignorecache) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			System.out.println("creating cache file");
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
 			try {
-				out.write("cache file for " + url + "\n");
 				Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 				for (Element d : doc.getElementsByClass("character")) {
 					String character = d.text();
-					out.write("c=" + character + "\n");
 					int wordCount = 0;
 					String sentenceURL = "https://tatoeba.org/eng/sentences/search?query=" + character
 							+ "&from=jpn&to=eng";
+					out.write("cache file for " + url + " and " + sentenceURL + " and http://www.gavo.t.u-tokyo.ac.jp/ojad/phrasing/index" + "\n");
+					out.write("c=" + character + "\n");
 					Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
 					for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
 						System.out.println("fleeex: " + japaneseSentence.text());
@@ -60,16 +63,16 @@ public class KanjiMeaningRipper {
 						String japaneseSentence = null;
 						String englishSentence = null;
 						String kanaSentence = null;
-						List<Integer> accent = new LinkedList<Integer>();
+						String pitchSentence = null;
 						for (Element g : f.getElementsByAttributeValue("layout", "column")) {
 							// System.out.println("REEEEEEEEEEEEEEE");
 
 							for (Element k : g.getElementsByAttributeValue("class", "text")) {
 								if (type == 0) {
 									boolean hasSimilar = false;
-									System.out.println("starting compare");
+									//System.out.println("starting compare");
 									for (String s : japaneseSentences) {
-										System.out.println("comparing " + k.text() + " :to: " + s);
+										//System.out.println("comparing " + k.text() + " :to: " + s);
 										if (areSimilarStrings(k.text(), s)) {
 											System.out.println("clash!");
 											hasSimilar = true;
@@ -107,14 +110,23 @@ public class KanjiMeaningRipper {
 							}
 						}
 						if (success) {
-							out.write("w=" + japaneseSentence + "/-/" + englishSentence + "\n");
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							PitchAccentPoster poster = new PitchAccentPoster();
+							poster.sendPost(japaneseSentence);
+							kanaSentence = poster.getKana();
+							pitchSentence = poster.getPitch();
+							out.write("w=" + japaneseSentence + "/-/" + englishSentence + "/-/" + kanaSentence + "/-/" + pitchSentence + "\n");
 							wordCount++;
 						}
-						if (wordCount >= 8) {
+						if (wordCount >= 5) {
 							break;
 						}
 					}
-					if (wordCount >= 8) {
+					if (wordCount >= 5) {
 						break;
 					}
 				}
@@ -139,27 +151,25 @@ public class KanjiMeaningRipper {
 			} finally {
 				out.close();
 			}
+		}System.out.println("reading cache file");
+
+	BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
+	String line = null;while((line=bufferedReader.readLine())!=null)
+	{
+		if (line.startsWith("c=")) {
+			character = line.substring(2);
 		}
-		System.out.println("reading cache file");
-
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
-		String line = null;
-		while ((line = bufferedReader.readLine()) != null) {
-			if (line.startsWith("c=")) {
-				character = line.substring(2);
-			}
-			if (line.startsWith("m=")) {
-				meaning = line.substring(2);
-			}
-			if (line.startsWith("w=")) {
-				String[] strings = line.split("/-/");
-				words.add(new KanjiSentence(strings[0].substring(2), strings[1]));
-
-			}
+		if (line.startsWith("m=")) {
+			meaning = line.substring(2);
 		}
-		bufferedReader.close();
+		if (line.startsWith("w=")) {
+			String[] strings = line.split("/-/");
+			words.add(new KanjiSentence(strings[0].substring(2), strings[1], strings[2], strings[3]));
 
-		return new PageData(character, meaning, words, 6);
+		}
+	}bufferedReader.close();
+
+	return new PageData(character,meaning,words,6);
 	}
 
 	boolean areSimilarStrings(String str1, String str2) {

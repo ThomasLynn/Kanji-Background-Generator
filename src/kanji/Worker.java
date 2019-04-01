@@ -2,7 +2,6 @@ package kanji;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
 
 public class Worker implements Runnable {
 
@@ -25,12 +24,7 @@ public class Worker implements Runnable {
 				ImageMaker imageMaker = new ImageMaker (pageData, d.width, d.height, outputFolder);
 				imageMaker.makeImage();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		SyncCounter.decCounter();

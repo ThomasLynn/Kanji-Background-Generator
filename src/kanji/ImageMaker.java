@@ -67,17 +67,96 @@ public class ImageMaker {
 		return (int) (height * val);
 	}
 
+	private boolean isSmallKana(char ch) {
+		if (ch == 'ょ') {
+			return true;
+		}
+		if (ch == 'ゅ') {
+			return true;
+		}
+		if (ch == 'ゃ') {
+			return true;
+		}
+		return false;
+	}
+
 	private void drawDef(Graphics2D g2d, ArrayList<KanjiSentence> kanjiSentences, double startY, int height) {
 		int line = 0;
+		Font kanjiFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.03));
+		Font englishFont = new Font("Sans-serif", Font.PLAIN, scale(height, 0.03));
 		for (int i = 0; i < kanjiSentences.size(); i++) {
-			g2d.setFont(new Font("Meiryo", Font.PLAIN, scale(height, 0.03)));
-			g2d.drawString(kanjiSentences.get(i).japaneseSentences, scale(height, 0.8),
+			// int kanjiWidth =
+			// g2d.getFontMetrics(kanjiFont).stringWidth(kanjiSentences.get(i).kanjiSentence);
+			// int kanaWidth =
+			// g2d.getFontMetrics(kanjiFont).stringWidth(kanjiSentences.get(i).kanaSentence);
+			Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.02));
+			g2d.setFont(kanaFont);
+			int drawHeight = scale(height, startY + getLineOffset(line) + 0.01f);
+			g2d.drawString(kanjiSentences.get(i).kanaSentence, scale(height, 0.8), drawHeight);
+			drawHeight = scale(height, startY + getLineOffset(line) + 0.01f) - g2d.getFontMetrics(kanaFont).getAscent();
+			int oldStringPos = 0;
+			int stringPos = 0;
+			for (int k = 0; k < kanjiSentences.get(i).pitchSentence.length(); k++) {
+				oldStringPos = stringPos;
+				if (k + 1 < kanjiSentences.get(i).pitchSentence.length()) {
+					if (isSmallKana(kanjiSentences.get(i).kanaSentence.charAt(stringPos + 1))) {
+						stringPos++;
+					}
+				}
+				stringPos++;
+				if (kanjiSentences.get(i).pitchSentence.charAt(k) == '1') {
+					Color tempColor = g2d.getColor();
+					g2d.setColor(Color.LIGHT_GRAY);
+					g2d.fillRect(
+							scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
+									.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
+							drawHeight,
+							g2d.getFontMetrics(kanaFont)
+									.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, stringPos))
+									- g2d.getFontMetrics(kanaFont)
+											.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
+							3);
+					g2d.setColor(tempColor);
+				}
+				if (kanjiSentences.get(i).pitchSentence.charAt(k) == '2') {
+					Color tempColor = g2d.getColor();
+					g2d.setColor(Color.LIGHT_GRAY);
+					g2d.fillRect(
+							scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
+									.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
+							drawHeight,
+							g2d.getFontMetrics(kanaFont)
+									.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, stringPos))
+									- g2d.getFontMetrics(kanaFont)
+											.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
+							3);
+					g2d.fillRect(
+							scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
+									.stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, stringPos)),
+							drawHeight, 3, g2d.getFontMetrics(kanaFont).getAscent() / 3);
+					g2d.setColor(tempColor);
+				}
+				/*
+				 * g2d.drawLine( scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
+				 * .stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
+				 * drawHeight, scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
+				 * .stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, stringPos)),
+				 * drawHeight);l
+				 */
+
+			}
+			line++;
+
+			g2d.setFont(kanjiFont);
+			g2d.drawString(kanjiSentences.get(i).kanjiSentence, scale(height, 0.8),
 					scale(height, startY + getLineOffset(line)));
 			line++;
-			g2d.setFont(new Font("Sans-serif", Font.PLAIN, scale(height, 0.03)));
-			g2d.drawString(kanjiSentences.get(i).englishSentences, scale(height, 0.8),
+
+			g2d.setFont(englishFont);
+			g2d.drawString(kanjiSentences.get(i).englishSentence, scale(height, 0.8),
 					scale(height, startY + getLineOffset(line)));
 			line++;
+
 		}
 	}
 
