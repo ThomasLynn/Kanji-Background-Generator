@@ -30,6 +30,93 @@ public class KanjiMeaningRipper {
 		words = new ArrayList<KanjiSentence>();
 	}
 
+	private List<String> stuff(String sentenceURL, List<String> outputList) throws Exception {
+		if (outputList.size() >= 5) {
+			return outputList;
+		}
+		Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
+		for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
+			System.out.println("fleeex: " + japaneseSentence.text());
+		}
+		List<String> japaneseSentences = new LinkedList<String>();
+		for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
+			boolean success = true;
+			// System.out.println("tESTSETSETETSETS");
+			int type = 0;
+			String japaneseSentence = null;
+			String englishSentence = null;
+			String kanaSentence = null;
+			String pitchSentence = null;
+			for (Element g : f.getElementsByAttributeValue("layout", "column")) {
+				// System.out.println("REEEEEEEEEEEEEEE");
+
+				for (Element k : g.getElementsByAttributeValue("class", "text")) {
+					if (type == 0) {
+						boolean hasSimilar = false;
+						// System.out.println("starting compare");
+						for (String s : japaneseSentences) {
+							// System.out.println("comparing " + k.text() + " :to: " + s);
+							if (areSimilarStrings(k.text(), s)) {
+								System.out.println("clash!");
+								hasSimilar = true;
+								success = false;
+								break;
+							}
+						}
+						if (hasSimilar == false) {
+							if (k.text().length() <= 6) {
+								success = false;
+							} else {
+								japaneseSentence = k.text();
+								japaneseSentences.add(k.text());
+							}
+						}
+					} else {
+						if (englishSentence == null) {
+							englishSentence = k.text();
+							if (englishSentence.length() > 70) {
+								success = false;
+							}
+						} else {
+							if (areSimilarStrings(englishSentence, k.text())) {
+								type--;
+							} else {
+								String oldSentence = englishSentence;
+								englishSentence += " / " + k.text();
+								if (englishSentence.length() > 70) {
+									englishSentence = oldSentence;
+								}
+							}
+						}
+					}
+					type++;
+					break;
+				}
+				if (type >= 3) {
+					break;
+				}
+			}
+			if (success) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				PitchAccentPoster poster = new PitchAccentPoster();
+				poster.sendPost(japaneseSentence);
+				kanaSentence = poster.getKana();
+				pitchSentence = poster.getPitch();
+
+				outputList.add("w=" + japaneseSentence + "/-/" + englishSentence + "/-/" + kanaSentence + "/-/"
+						+ pitchSentence + "\n");
+				if (outputList.size() >= 5) {
+					return outputList;
+				}
+			}
+		}
+		return outputList;
+	}
+
 	public PageData getData() throws Exception {
 		String cacheFileLoc = "cache/" + url.substring("https://jisho.org/search/".length());
 		File cacheFile = new File(cacheFileLoc);
@@ -46,88 +133,17 @@ public class KanjiMeaningRipper {
 				Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 				for (Element d : doc.getElementsByClass("character")) {
 					String character = d.text();
-					int wordCount = 0;
 					String sentenceURL = "https://tatoeba.org/eng/sentences/search?query=" + character
 							+ "&from=jpn&to=eng";
-					out.write("cache file for " + url + " and " + sentenceURL + " and http://www.gavo.t.u-tokyo.ac.jp/ojad/phrasing/index" + "\n");
+					out.write("cache file for " + url + " and " + sentenceURL
+							+ " and http://www.gavo.t.u-tokyo.ac.jp/ojad/phrasing/index" + "\n");
 					out.write("c=" + character + "\n");
-					Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
-					for (Element japaneseSentence : sentenceDoc.getElementsByClass("text flex")) {
-						System.out.println("fleeex: " + japaneseSentence.text());
+					List<String> wList = new LinkedList<String>();
+					for (int p = 1; p <= 6; p++) {
+						stuff(sentenceURL + "&page=" + Integer.toString(p), wList);
 					}
-					List<String> japaneseSentences = new LinkedList<String>();
-					for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
-						boolean success = true;
-						// System.out.println("tESTSETSETETSETS");
-						int type = 0;
-						String japaneseSentence = null;
-						String englishSentence = null;
-						String kanaSentence = null;
-						String pitchSentence = null;
-						for (Element g : f.getElementsByAttributeValue("layout", "column")) {
-							// System.out.println("REEEEEEEEEEEEEEE");
-
-							for (Element k : g.getElementsByAttributeValue("class", "text")) {
-								if (type == 0) {
-									boolean hasSimilar = false;
-									//System.out.println("starting compare");
-									for (String s : japaneseSentences) {
-										//System.out.println("comparing " + k.text() + " :to: " + s);
-										if (areSimilarStrings(k.text(), s)) {
-											System.out.println("clash!");
-											hasSimilar = true;
-											success = false;
-											break;
-										}
-									}
-									if (hasSimilar == false) {
-										japaneseSentence = k.text();
-										japaneseSentences.add(k.text());
-									}
-								} else {
-									if (englishSentence == null) {
-										englishSentence = k.text();
-										if (englishSentence.length() > 70) {
-											success = false;
-										}
-									} else {
-										if (areSimilarStrings(englishSentence, k.text())) {
-											type--;
-										} else {
-											String oldSentence = englishSentence;
-											englishSentence += " / " + k.text();
-											if (englishSentence.length() > 70) {
-												englishSentence = oldSentence;
-											}
-										}
-									}
-								}
-								type++;
-								break;
-							}
-							if (type >= 3) {
-								break;
-							}
-						}
-						if (success) {
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							PitchAccentPoster poster = new PitchAccentPoster();
-							poster.sendPost(japaneseSentence);
-							kanaSentence = poster.getKana();
-							pitchSentence = poster.getPitch();
-							out.write("w=" + japaneseSentence + "/-/" + englishSentence + "/-/" + kanaSentence + "/-/" + pitchSentence + "\n");
-							wordCount++;
-						}
-						if (wordCount >= 5) {
-							break;
-						}
-					}
-					if (wordCount >= 5) {
-						break;
+					for (int strI = 0; strI < Math.min(5, wList.size()); strI++) {
+						out.write(wList.get(strI));
 					}
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
@@ -151,25 +167,27 @@ public class KanjiMeaningRipper {
 			} finally {
 				out.close();
 			}
-		}System.out.println("reading cache file");
-
-	BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
-	String line = null;while((line=bufferedReader.readLine())!=null)
-	{
-		if (line.startsWith("c=")) {
-			character = line.substring(2);
 		}
-		if (line.startsWith("m=")) {
-			meaning = line.substring(2);
-		}
-		if (line.startsWith("w=")) {
-			String[] strings = line.split("/-/");
-			words.add(new KanjiSentence(strings[0].substring(2), strings[1], strings[2], strings[3]));
+		System.out.println("reading cache file");
 
-		}
-	}bufferedReader.close();
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
+		String line = null;
+		while ((line = bufferedReader.readLine()) != null) {
+			if (line.startsWith("c=")) {
+				character = line.substring(2);
+			}
+			if (line.startsWith("m=")) {
+				meaning = line.substring(2);
+			}
+			if (line.startsWith("w=")) {
+				String[] strings = line.split("/-/");
+				words.add(new KanjiSentence(strings[0].substring(2), strings[1], strings[2], strings[3]));
 
-	return new PageData(character,meaning,words,6);
+			}
+		}
+		bufferedReader.close();
+
+		return new PageData(character, meaning, words, 6);
 	}
 
 	boolean areSimilarStrings(String str1, String str2) {
