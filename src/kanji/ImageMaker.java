@@ -82,16 +82,10 @@ public class ImageMaker {
 
 	private void drawDef(Graphics2D g2d, ArrayList<KanjiSentence> kanjiSentences, double startY, int height) {
 		int line = 0;
-		Font kanjiFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.03));
+		Font kanjiFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.033));
 		Font englishFont = new Font("Sans-serif", Font.PLAIN, scale(height, 0.03));
-		g2d.setFont(kanjiFont);
 		for (int i = 0; i < kanjiSentences.size(); i++) {
-			g2d.drawString(kanjiSentences.get(i).kanjiSentence, scale(height, 0.8),
-					scale(height, startY + getLineOffset(line)));
-			line++;
-		}
-		for (int i = 0; i < kanjiSentences.size(); i++) {
-			Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.03));
+			Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.02));
 			g2d.setFont(kanaFont);
 			int drawHeight = scale(height, startY + getLineOffset(line) + 0.01f);
 			g2d.drawString(kanjiSentences.get(i).kanaSentence, scale(height, 0.8), drawHeight);
@@ -141,7 +135,12 @@ public class ImageMaker {
 
 			}
 			line++;
+			g2d.setFont(kanjiFont);
+			g2d.drawString(kanjiSentences.get(i).kanjiSentence, scale(height, 0.8),
+					scale(height, startY + getLineOffset(line)));
+			line++;
 		}
+		line++;
 		for (int i = 0; i < kanjiSentences.size(); i++) {
 			g2d.setFont(englishFont);
 			g2d.drawString(kanjiSentences.get(i).englishSentence, scale(height, 0.8),
