@@ -93,11 +93,6 @@ public class KanjiMeaningRipper {
 				}
 			}
 			if (success) {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				PitchAccentPoster poster = new PitchAccentPoster();
 				poster.sendPost(japaneseSentence);
 				kanaSentence = poster.getKana();

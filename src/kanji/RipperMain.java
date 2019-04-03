@@ -16,7 +16,7 @@ public class RipperMain {
 	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
-	public static int poolSize = 8;
+	public static int poolSize = 1;
 	public static boolean ignorecache = false;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
@@ -48,8 +48,8 @@ public class RipperMain {
 
 		System.out.println("Thread count: " + poolSize);
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
-		String cacheFolder = "cache";
-		new File(cacheFolder).mkdirs();
+		new File("cache").mkdirs();
+		new File("pitchcache").mkdirs();
 
 		long ltimer = System.currentTimeMillis();
 
