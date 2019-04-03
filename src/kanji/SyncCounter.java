@@ -11,7 +11,7 @@ public class SyncCounter {
 	public static synchronized void incCounter() {
 		counter++;
 	}
-	
+
 	public static synchronized void decCounter() {
 		counter--;
 	}
