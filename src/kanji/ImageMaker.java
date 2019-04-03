@@ -85,10 +85,6 @@ public class ImageMaker {
 		Font kanjiFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.03));
 		Font englishFont = new Font("Sans-serif", Font.PLAIN, scale(height, 0.03));
 		for (int i = 0; i < kanjiSentences.size(); i++) {
-			// int kanjiWidth =
-			// g2d.getFontMetrics(kanjiFont).stringWidth(kanjiSentences.get(i).kanjiSentence);
-			// int kanaWidth =
-			// g2d.getFontMetrics(kanjiFont).stringWidth(kanjiSentences.get(i).kanaSentence);
 			Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.02));
 			g2d.setFont(kanaFont);
 			int drawHeight = scale(height, startY + getLineOffset(line) + 0.01f);
@@ -136,13 +132,6 @@ public class ImageMaker {
 							drawHeight, 3, g2d.getFontMetrics(kanaFont).getAscent() / 3);
 					g2d.setColor(tempColor);
 				}
-				/*
-				 * g2d.drawLine( scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
-				 * .stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, oldStringPos)),
-				 * drawHeight, scale(height, 0.8) + g2d.getFontMetrics(kanaFont)
-				 * .stringWidth(kanjiSentences.get(i).kanaSentence.substring(0, stringPos)),
-				 * drawHeight);l
-				 */
 
 			}
 			line++;

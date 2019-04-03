@@ -41,21 +41,17 @@ public class KanjiMeaningRipper {
 		List<String> japaneseSentences = new LinkedList<String>();
 		for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
 			boolean success = true;
-			// System.out.println("tESTSETSETETSETS");
 			int type = 0;
 			String japaneseSentence = null;
 			String englishSentence = null;
 			String kanaSentence = null;
 			String pitchSentence = null;
 			for (Element g : f.getElementsByAttributeValue("layout", "column")) {
-				// System.out.println("REEEEEEEEEEEEEEE");
 
 				for (Element k : g.getElementsByAttributeValue("class", "text")) {
 					if (type == 0) {
 						boolean hasSimilar = false;
-						// System.out.println("starting compare");
 						for (String s : japaneseSentences) {
-							// System.out.println("comparing " + k.text() + " :to: " + s);
 							if (areSimilarStrings(k.text(), s)) {
 								System.out.println("clash!");
 								hasSimilar = true;
@@ -149,20 +145,6 @@ public class KanjiMeaningRipper {
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
 					out.write("m=" + d.text() + "\n");
 				}
-
-				/*
-				 * for (Element d : doc.getElementsByClass("row compounds")) { Elements divs =
-				 * d.getElementsByClass("no-bullet"); try { for (Element e :
-				 * divs.get(0).children()) { out.write("w=" + e.text() +
-				 * "/-/日本語sentence 1---englishsentence1\n"); } } catch
-				 * (IndexOutOfBoundsException e) {
-				 * 
-				 * } try { for (Element e : divs.get(1).children()) { out.write("w=" + e.text()
-				 * + "/-/日本語sentence 1---englishsentence1\n"); } } catch
-				 * (IndexOutOfBoundsException e) {
-				 * 
-				 * } }
-				 */
 
 			} finally {
 				out.close();

@@ -30,7 +30,6 @@ public class PitchAccentPoster {
 	}
 
 	public String getPitch() {
-		//System.out.println("starting");
 		for (Element e : doc.getElementsByClass("phrasing_text")) {
 			int type = 0;
 			String pitches = "";
@@ -43,13 +42,10 @@ public class PitchAccentPoster {
 						type = 2;
 					}
 					if (k.contains("mola")) {
-						//System.out.println(type);
 						pitches+= Integer.toString(type);
 						type = 0;
 					}
-					//System.out.println(k);
 				}
-				// System.out.println(d.text());
 			}
 			return pitches;
 		}
