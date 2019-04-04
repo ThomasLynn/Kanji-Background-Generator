@@ -35,7 +35,7 @@ public class KanjiMeaningRipper {
 	public PageData getData() throws Exception {
 		String cacheFileLoc = "cache/" + url.substring("https://jisho.org/search/".length());
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || RipperMain.ignorecache) {
+		if (!cacheFile.exists() || RipperMain.ignorecache || cacheFile.length()==0) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {

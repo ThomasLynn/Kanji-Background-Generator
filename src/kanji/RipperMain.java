@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +17,7 @@ public class RipperMain {
 	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
-	public static int poolSize = 6;
+	public static int poolSize = 8;
 	public static boolean ignorecache = false;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
@@ -25,8 +26,8 @@ public class RipperMain {
 	// public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
 	// public static String[] stems = new String[] { "n1" };
 	// uncomment this to do a proper run
-	//private static String[] stems = new String[] { "ntest" };
-	private static String[] stems = new String[] { "n5" };
+	private static String[] stems = new String[] { "ntest" };
+	//private static String[] stems = new String[] { "n5" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
@@ -64,6 +65,9 @@ public class RipperMain {
 				urls.add(line);
 			}
 			bufferedReader.close();
+			
+			// increases speed where there is partial caching
+			Collections.shuffle(urls);
 
 			for (String url : urls) {
 				if (url.length() > 0) {

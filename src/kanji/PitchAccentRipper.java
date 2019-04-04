@@ -17,15 +17,17 @@ public class PitchAccentRipper {
 
 	public static PitchAccentOutput getData(String kanjiSentence) throws Exception {
 		String safeSentence = kanjiSentence;
-		for(int i=0;i<safeSentence.length();i++) {
-			if (!(JapaneseCharacter.isKana(safeSentence.charAt(i)) || JapaneseCharacter.isKanji(safeSentence.charAt(i)))){
+		for (int i = 0; i < safeSentence.length(); i++) {
+			if (!(JapaneseCharacter.isKana(safeSentence.charAt(i))
+					|| JapaneseCharacter.isKanji(safeSentence.charAt(i)))) {
 				safeSentence = safeSentence.replace(safeSentence.charAt(i), '_');
 			}
 		}
 		String cacheFileLoc = "pitchcache/" + safeSentence + ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists()) { // maybe add option to override cache (separate from other cache override)
-			doPost(kanjiSentence,cacheFile);
+		if (!cacheFile.exists() || cacheFile.length() == 0) { // maybe add option to override cache (separate from other
+																// cache override)
+			doPost(kanjiSentence, cacheFile);
 		}
 		System.out.println("reading pitch cache file");
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
@@ -42,8 +44,9 @@ public class PitchAccentRipper {
 		bufferedReader.close();
 		return output;
 	}
-	
-	private static synchronized void doPost(String kanjiSentence, File cacheFile) throws InterruptedException, IOException {
+
+	private static synchronized void doPost(String kanjiSentence, File cacheFile)
+			throws InterruptedException, IOException {
 		System.out.println("starting accent post");
 		Thread.sleep(3000);
 		cacheFile.createNewFile();
@@ -72,7 +75,7 @@ public class PitchAccentRipper {
 						type = 2;
 					}
 					if (k.contains("mola")) {
-						pitches+= Integer.toString(type);
+						pitches += Integer.toString(type);
 						type = 0;
 					}
 				}

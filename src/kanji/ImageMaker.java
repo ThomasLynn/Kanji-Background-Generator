@@ -94,7 +94,7 @@ public class ImageMaker {
 			int stringPos = 0;
 			for (int k = 0; k < kanjiSentences.get(i).pitchSentence.length(); k++) {
 				oldStringPos = stringPos;
-				if (stringPos + 1 < kanjiSentences.get(i).kanaSentence.length()) {
+				if (k + 1 < kanjiSentences.get(i).pitchSentence.length()) {
 					if (isSmallKana(kanjiSentences.get(i).kanaSentence.charAt(stringPos + 1))) {
 						stringPos++;
 					}
@@ -132,7 +132,7 @@ public class ImageMaker {
 							drawHeight, 3, g2d.getFontMetrics(kanaFont).getAscent() / 3);
 					g2d.setColor(tempColor);
 				}
-				k=stringPos;
+
 			}
 			line++;
 			g2d.setFont(kanjiFont);
