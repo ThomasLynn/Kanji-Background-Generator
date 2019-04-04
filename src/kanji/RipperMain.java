@@ -16,8 +16,8 @@ public class RipperMain {
 	 * ayy lamo who needs comments anyway?
 	 */
 	// amount of threads to run the program on
-	public static int poolSize = 1;
-	public static boolean ignorecache = true;
+	public static int poolSize = 6;
+	public static boolean ignorecache = false;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
 	// stems of info used. This determines what txt file to read and what folder to
@@ -25,8 +25,8 @@ public class RipperMain {
 	// public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
 	// public static String[] stems = new String[] { "n1" };
 	// uncomment this to do a proper run
-	private static String[] stems = new String[] { "ntest" };
-	//private static String[] stems = new String[] { "ntesttiny" };
+	//private static String[] stems = new String[] { "ntest" };
+	private static String[] stems = new String[] { "n5" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as
@@ -50,10 +50,9 @@ public class RipperMain {
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
 		new File("cache").mkdirs();
 		new File("pitchcache").mkdirs();
+		new File("sentencecache").mkdirs();
 
 		long ltimer = System.currentTimeMillis();
-
-		
 
 		SyncCounter.resetCounter();
 		for (String stem : stems) {

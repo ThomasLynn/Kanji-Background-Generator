@@ -22,7 +22,7 @@ public class PitchAccentRipper {
 				safeSentence = safeSentence.replace(safeSentence.charAt(i), '_');
 			}
 		}
-		String cacheFileLoc = "pitchcache/" + safeSentence;
+		String cacheFileLoc = "pitchcache/" + safeSentence + ".data";
 		File cacheFile = new File(cacheFileLoc);
 		if (!cacheFile.exists()) { // maybe add option to override cache (separate from other cache override)
 			doPost(kanjiSentence,cacheFile);
@@ -44,8 +44,8 @@ public class PitchAccentRipper {
 	}
 	
 	private static synchronized void doPost(String kanjiSentence, File cacheFile) throws InterruptedException, IOException {
+		System.out.println("starting accent post");
 		Thread.sleep(3000);
-		System.out.println("creating pitch cache file: "+kanjiSentence);
 		cacheFile.createNewFile();
 		Document doc = Jsoup.connect("http://www.gavo.t.u-tokyo.ac.jp/ojad/phrasing/index").userAgent(
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36")
@@ -81,5 +81,6 @@ public class PitchAccentRipper {
 			break;
 		}
 		out.close();
+		System.out.println("ending accent post");
 	}
 }

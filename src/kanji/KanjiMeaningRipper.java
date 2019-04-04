@@ -58,7 +58,7 @@ public class KanjiMeaningRipper {
 						SentenceRipper.getSentences(sentenceURL + "&page=" + Integer.toString(p), wList);
 					}
 					for (int strI = 0; strI < Math.min(5, wList.size()); strI++) {
-						out.write(wList.get(strI));
+						out.write(wList.get(strI)+"\n");
 					}
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
