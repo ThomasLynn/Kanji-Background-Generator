@@ -1,6 +1,6 @@
 
 output/
-cache/
+charactercache/
 bin/
 pitchcache/
 sentencecache/

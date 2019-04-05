@@ -18,7 +18,12 @@ public class RipperMain {
 	 */
 	// amount of threads to run the program on
 	public static int poolSize = 8;
-	public static boolean ignorecache = false;
+	
+	// 0 = keep cache
+	// 1 = invalidate character cache, 
+	// 2 = invalidate cache 1 + sentence cache
+	// 3 = invalidate 1+2 cache + pitch cache
+	public static int invalidateCache = 0;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
 	// stems of info used. This determines what txt file to read and what folder to
@@ -49,7 +54,7 @@ public class RipperMain {
 
 		System.out.println("Thread count: " + poolSize);
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
-		new File("cache").mkdirs();
+		new File("charactercache").mkdirs();
 		new File("pitchcache").mkdirs();
 		new File("sentencecache").mkdirs();
 

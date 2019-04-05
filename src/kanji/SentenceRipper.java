@@ -28,7 +28,7 @@ public class SentenceRipper {
 				+ sentenceURL.substring(sentenceURL.lastIndexOf("query=") + 6, sentenceURL.lastIndexOf("&from"));
 		cacheFileLoc += sentenceURL.substring(sentenceURL.lastIndexOf("page=") + 5) + ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || cacheFile.length()==0) { // maybe add option to override cache (separate from other cache override)
+		if (!cacheFile.exists() || RipperMain.invalidateCache>=2 || cacheFile.length()==0) {
 			doPost(sentenceURL, cacheFile, outputList.size());
 		}
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));

@@ -25,8 +25,7 @@ public class PitchAccentRipper {
 		}
 		String cacheFileLoc = "pitchcache/" + safeSentence + ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || cacheFile.length() == 0) { // maybe add option to override cache (separate from other
-																// cache override)
+		if (!cacheFile.exists() || RipperMain.invalidateCache>=3 || cacheFile.length() == 0) {
 			doPost(kanjiSentence, cacheFile);
 		}
 		System.out.println("reading pitch cache file");
@@ -59,10 +58,13 @@ public class PitchAccentRipper {
 				.data("data[Phrasing][param]", "invisible").data("data[Phrasing][subscript]", "visible")
 				.data("data[Phrasing][jeita]", "invisible").timeout(10000).post();
 		Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
+		out.write("k=");
 		for (Element e : doc.getElementsByClass("phrasing_text")) {
-			out.write("k=" + e.text() + "\n");
-			break;
+			System.out.println("phrasing text: "+e.text());
+			out.write(e.text());
 		}
+		out.write("\n");
+		out.write("p=");
 		for (Element e : doc.getElementsByClass("phrasing_text")) {
 			int type = 0;
 			String pitches = "";
@@ -80,9 +82,9 @@ public class PitchAccentRipper {
 					}
 				}
 			}
-			out.write("p=" + pitches + "\n");
-			break;
+			out.write(pitches);
 		}
+		out.write("\n");
 		out.close();
 		System.out.println("ending accent post");
 	}
