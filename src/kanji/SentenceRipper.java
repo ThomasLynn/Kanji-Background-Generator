@@ -26,7 +26,7 @@ public class SentenceRipper {
 				+ sentenceURL.substring(sentenceURL.lastIndexOf("query=") + 6, sentenceURL.lastIndexOf("&from"));
 		cacheFileLoc += sentenceURL.substring(sentenceURL.lastIndexOf("page=") + 5) + ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || RipperMain.invalidateCache>=2 || cacheFile.length()==0) {
+		if (!cacheFile.exists() || RipperMain.invalidateCache >= 2 || cacheFile.length() == 0) {
 			doPost(sentenceURL, cacheFile, outputList.size());
 		}
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
@@ -114,14 +114,19 @@ public class SentenceRipper {
 			}
 			System.out.println("ending sentence post sync");
 		}
-		for (int i = 0; i < japaneseSentences.size(); i++) {
-			PitchAccentOutput output = PitchAccentRipper.getData(japaneseSentences.get(i));
-			String kanaSentence = output.kana;
-			String pitchSentence = output.pitch;
-
-			out.write("w=" + japaneseSentences.get(i) + "/-/" + englishSentences.get(i) + "/-/" + kanaSentence + "/-/"
-					+ pitchSentence + "\n");
+		List<PitchAccentOutput> outputs = PitchAccentRipper.getData(japaneseSentences);
+		for (int i = 0; i < outputs.size(); i++) {
+			out.write("w=" + japaneseSentences.get(i) + "/-/" + englishSentences.get(i) + "/-/" + outputs.get(i).kana
+					+ "/-/" + outputs.get(i).pitch + "\n");
 		}
+		/*
+		 * for (int i = 0; i < japaneseSentences.size(); i++) { PitchAccentOutput output
+		 * = PitchAccentRipper.getData(japaneseSentences.get(i)); String kanaSentence =
+		 * output.kana; String pitchSentence = output.pitch;
+		 * 
+		 * out.write("w=" + japaneseSentences.get(i) + "/-/" + englishSentences.get(i) +
+		 * "/-/" + kanaSentence + "/-/" + pitchSentence + "\n"); }
+		 */
 		out.close();
 
 		System.out.println("ending sentence post");
