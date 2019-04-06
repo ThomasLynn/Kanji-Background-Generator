@@ -21,8 +21,9 @@ public class PitchAccentRipper {
 		List<File> files = new LinkedList<File>();
 		List<String> needsPosting = new LinkedList<String>();
 		List<File> postingFiles = new LinkedList<File>();
+		System.out.println("current sentences:");
 		for (String w : kanjiSentences) {
-			//System.out.println(w);
+			System.out.println(w);
 			String safeSentence = w;
 			for (int i = 0; i < safeSentence.length(); i++) {
 				if (!(JapaneseCharacter.isKana(safeSentence.charAt(i))
@@ -79,8 +80,9 @@ public class PitchAccentRipper {
 		String combinedSentence = "";
 		//System.out.println("reee");
 		//System.out.println(kanjiSentences.size());
+		System.out.println("posting sentences:");
 		for (String w : kanjiSentences) {
-			//System.out.println(w);
+			System.out.println(w);
 			combinedSentence += w;
 			w += "\n";
 		}
