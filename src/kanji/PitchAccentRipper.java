@@ -28,7 +28,7 @@ public class PitchAccentRipper {
 		if (!cacheFile.exists() || RipperMain.invalidateCache>=3 || cacheFile.length() == 0) {
 			doPost(kanjiSentence, cacheFile);
 		}
-		System.out.println("reading pitch cache file");
+		//System.out.println("reading pitch cache file");
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
 		PitchAccentOutput output = new PitchAccentOutput();
 		String line = null;
@@ -46,7 +46,7 @@ public class PitchAccentRipper {
 
 	private static synchronized void doPost(String kanjiSentence, File cacheFile)
 			throws InterruptedException, IOException {
-		System.out.println("starting accent post");
+		//System.out.println("starting accent post");
 		Thread.sleep(3000);
 		cacheFile.createNewFile();
 		Document doc = Jsoup.connect("http://www.gavo.t.u-tokyo.ac.jp/ojad/phrasing/index").userAgent(
@@ -60,7 +60,7 @@ public class PitchAccentRipper {
 		Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
 		out.write("k=");
 		for (Element e : doc.getElementsByClass("phrasing_text")) {
-			System.out.println("phrasing text: "+e.text());
+			//System.out.println("phrasing text: "+e.text());
 			out.write(e.text());
 		}
 		out.write("\n");
@@ -86,6 +86,6 @@ public class PitchAccentRipper {
 		}
 		out.write("\n");
 		out.close();
-		System.out.println("ending accent post");
+		//System.out.println("ending accent post");
 	}
 }

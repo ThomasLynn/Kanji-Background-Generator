@@ -41,7 +41,7 @@ public class KanjiMeaningRipper {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("creating cache file");
+			//System.out.println("creating cache file");
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
 			try {
@@ -69,7 +69,7 @@ public class KanjiMeaningRipper {
 				out.close();
 			}
 		}
-		System.out.println("reading cache file");
+		//System.out.println("reading cache file");
 
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
 		String line = null;

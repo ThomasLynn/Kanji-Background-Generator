@@ -17,8 +17,6 @@ import org.jsoup.nodes.Element;
 
 public class SentenceRipper {
 
-	private static Object syncLock = new Object();
-
 	public static void getSentences(String sentenceURL, List<String> outputList) throws Exception {
 		if (outputList.size() >= 5) {
 			return;
@@ -41,14 +39,15 @@ public class SentenceRipper {
 		bufferedReader.close();
 	}
 
-	private static synchronized void doPost(String sentenceURL, File cacheFile, int currentSize) throws Exception {
+	private static void doPost(String sentenceURL, File cacheFile, int currentSize) throws Exception {
 		List<String> japaneseSentences = new LinkedList<String>();
 		List<String> englishSentences = new LinkedList<String>();
 		System.out.println("starting sentence post");
-		Thread.sleep(3000);
 		cacheFile.createNewFile();
 		Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
-		synchronized (syncLock) {
+		synchronized (SentenceRipper.class) {
+			Thread.sleep(3000);
+			System.out.println("starting sentence post sync");
 			Document sentenceDoc = Jsoup.parse(new URL(sentenceURL).openStream(), "UTF-8", sentenceURL);
 			List<String> japaneseCheckSentences = new LinkedList<String>();
 			for (Element f : sentenceDoc.getElementsByClass("sentence-and-translations")) {
