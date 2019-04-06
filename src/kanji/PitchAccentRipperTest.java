@@ -14,7 +14,6 @@ public class PitchAccentRipperTest {
 			assertEquals(output.kana,"きょう、なんようひ？");
 			assertEquals(output.pitch,"2001200");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

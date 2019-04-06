@@ -94,13 +94,15 @@ public class ImageMaker {
 			int stringPos = 0;
 			for (int k = 0; k < kanjiSentences.get(i).pitchSentence.length(); k++) {
 				oldStringPos = stringPos;
-				if (k + 1 < kanjiSentences.get(i).pitchSentence.length()) {
-					if (isSmallKana(kanjiSentences.get(i).kanaSentence.charAt(stringPos + 1))
-							|| kanjiSentences.get(i).kanaSentence.charAt(stringPos) == '、'
+				if (stringPos + 1 < kanjiSentences.get(i).kanaSentence.length()) {
+					if (isSmallKana(kanjiSentences.get(i).kanaSentence.charAt(stringPos + 1))) {
+						stringPos++;
+					}else if(kanjiSentences.get(i).kanaSentence.charAt(stringPos) == '、'
 							|| kanjiSentences.get(i).kanaSentence.charAt(stringPos) == '？'
 							|| kanjiSentences.get(i).kanaSentence.charAt(stringPos) == '。'
 							|| kanjiSentences.get(i).kanaSentence.charAt(stringPos) == '！') {
 						stringPos++;
+						oldStringPos++;
 					}
 				}
 				stringPos++;
