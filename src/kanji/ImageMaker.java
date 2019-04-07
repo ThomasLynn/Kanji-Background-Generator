@@ -84,8 +84,8 @@ public class ImageMaker {
 		int line = 0;
 		Font kanjiFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.033));
 		Font englishFont = new Font("Sans-serif", Font.PLAIN, scale(height, 0.03));
+		Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.02));
 		for (int i = 0; i < kanjiSentences.size(); i++) {
-			Font kanaFont = new Font("Meiryo", Font.PLAIN, scale(height, 0.02));
 			g2d.setFont(kanaFont);
 			int drawHeight = scale(height, startY + getLineOffset(line) + 0.01f);
 			g2d.drawString(kanjiSentences.get(i).kanaSentence, scale(height, 0.8), drawHeight);

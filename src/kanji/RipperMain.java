@@ -31,8 +31,8 @@ public class RipperMain {
 	// public static String[] stems = new String[] { "n5", "n4", "n3", "n2" };
 	// public static String[] stems = new String[] { "n1" };
 	// uncomment this to do a proper run
-	//private static String[] stems = new String[] { "ntest" };
-	private static String[] stems = new String[] { "n5" };
+	private static String[] stems = new String[] { "ntest" };
+	//private static String[] stems = new String[] { "n5" };
 	// uncomment this to do tests
 
 	// lists all the image resolutions to output as

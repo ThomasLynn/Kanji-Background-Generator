@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,18 +32,18 @@ public class KanjiMeaningRipper {
 		words = new ArrayList<KanjiSentence>();
 	}
 
-	
-
 	public PageData getData() throws Exception {
-		String cacheFileLoc = "charactercache/" + url.substring("https://jisho.org/search/".length()) + ".data";
+		String cacheFileLoc = "charactercache/"
+				+ URLDecoder.decode(url.substring("https://jisho.org/search/".length()), StandardCharsets.UTF_8.name()).substring(0,1)
+				+ ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || RipperMain.invalidateCache>=1 || cacheFile.length()==0) {
+		if (!cacheFile.exists() || RipperMain.invalidateCache >= 1 || cacheFile.length() == 0) {
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			//System.out.println("creating cache file");
+			// System.out.println("creating cache file");
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
 			try {
@@ -58,7 +60,7 @@ public class KanjiMeaningRipper {
 						SentenceRipper.getSentences(sentenceURL + "&page=" + Integer.toString(p), wList);
 					}
 					for (int strI = 0; strI < Math.min(5, wList.size()); strI++) {
-						out.write(wList.get(strI)+"\n");
+						out.write(wList.get(strI) + "\n");
 					}
 				}
 				for (Element d : doc.getElementsByClass("kanji-details__main-meanings")) {
@@ -69,7 +71,7 @@ public class KanjiMeaningRipper {
 				out.close();
 			}
 		}
-		//System.out.println("reading cache file");
+		// System.out.println("reading cache file");
 
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(cacheFile));
 		String line = null;

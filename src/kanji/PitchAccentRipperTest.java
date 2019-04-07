@@ -12,11 +12,16 @@ public class PitchAccentRipperTest {
 		try {
 			RipperMain.invalidateCache = 3;
 			List<String> strings = new LinkedList<String>();
-			strings.add("早く、こっち！");
-			strings.add("彼は早起きだ。");
-			strings.add("彼は早く寝た。");
-			strings.add("彼は手が早い。");
-			strings.add("早く来なさい。");
+			strings.add("本当？");
+			strings.add("本気？");
+			strings.add("本当に？");
+			strings.add("本当？なぜ？");
+			strings.add("本当だよ！");
+			strings.add("それ本当？");
+			strings.add("本当なの。");
+			strings.add("本気だよ。");
+			strings.add("これ誰の本？");
+			strings.add("いい本だ。");
 			List<PitchAccentOutput> outputs = PitchAccentRipper.getData(strings);
 			for(PitchAccentOutput w: outputs) {
 				System.out.println(":::");
