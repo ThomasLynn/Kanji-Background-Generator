@@ -35,7 +35,7 @@ public class KanjiMeaningRipper {
 	}
 
 	public PageData getData() throws Exception {
-		String cacheFileLoc = "charactercache/"
+		String cacheFileLoc = "cache/charactercache/"
 				+ URLDecoder.decode(url.substring("https://jisho.org/search/".length()), StandardCharsets.UTF_8.name())
 						.substring(0, 1)
 				+ ".data";

@@ -24,7 +24,7 @@ public class SentenceRipper {
 			return;
 		}
 
-		String cacheFileLoc = "sentencecache/"
+		String cacheFileLoc = "cache/sentencecache/"
 				+ sentenceURL.substring(sentenceURL.lastIndexOf("query=") + 6, sentenceURL.lastIndexOf("&from"));
 		cacheFileLoc += sentenceURL.substring(sentenceURL.lastIndexOf("page=") + 5) + ".data";
 		File cacheFile = new File(cacheFileLoc);

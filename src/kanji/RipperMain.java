@@ -54,9 +54,10 @@ public class RipperMain {
 
 		System.out.println("Thread count: " + poolSize);
 		ExecutorService executorService = Executors.newFixedThreadPool(poolSize);
-		new File("charactercache").mkdirs();
-		new File("pitchcache").mkdirs();
-		new File("sentencecache").mkdirs();
+		new File("cache").mkdir();
+		new File("cache/charactercache").mkdirs();
+		new File("cache/pitchcache").mkdirs();
+		new File("cache/sentencecache").mkdirs();
 
 		long ltimer = System.currentTimeMillis();
 

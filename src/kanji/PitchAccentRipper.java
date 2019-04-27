@@ -70,7 +70,7 @@ public class PitchAccentRipper {
 	}
 
 	private static String getFileLocation(String kanjiSentence) {
-		return "pitchcache/" + makeSafeString(kanjiSentence) + ".data";
+		return "cache/pitchcache/" + makeSafeString(kanjiSentence) + ".data";
 	}
 
 	private static String makeSafeString(String unsafeString) {
