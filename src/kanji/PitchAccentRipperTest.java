@@ -10,7 +10,7 @@ public class PitchAccentRipperTest {
 	@Test
 	public void test() {
 		try {
-			RipperMain.invalidateCache = 3;
+			//RipperMain.invalidateCache = 3;
 			List<String> strings = new LinkedList<String>();
 			strings.add("本当？");
 			strings.add("本気？");

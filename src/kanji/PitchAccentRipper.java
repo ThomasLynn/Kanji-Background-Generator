@@ -30,7 +30,7 @@ public class PitchAccentRipper {
 			String cacheFileLoc = getFileLocation(w);
 			File cacheFile = new File(cacheFileLoc);
 			files.add(cacheFile);
-			if (!cacheFile.exists() || cacheFile.length() == 0 || RipperMain.invalidateCache >= 3) {
+			if (!cacheFile.exists() || cacheFile.length() == 0) {
 				needsPosting.add(w);
 				postingFiles.add(cacheFile);
 			}

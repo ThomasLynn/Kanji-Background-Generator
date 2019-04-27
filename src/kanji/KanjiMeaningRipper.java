@@ -20,6 +20,8 @@ import org.jsoup.nodes.Element;
 
 public class KanjiMeaningRipper {
 
+	private static KanjiMeaningRipperTimerManager timeManager = new KanjiMeaningRipperTimerManager();
+
 	private String url;
 	private String character;
 	private String meaning;
@@ -34,15 +36,20 @@ public class KanjiMeaningRipper {
 
 	public PageData getData() throws Exception {
 		String cacheFileLoc = "charactercache/"
-				+ URLDecoder.decode(url.substring("https://jisho.org/search/".length()), StandardCharsets.UTF_8.name()).substring(0,1)
+				+ URLDecoder.decode(url.substring("https://jisho.org/search/".length()), StandardCharsets.UTF_8.name())
+						.substring(0, 1)
 				+ ".data";
 		File cacheFile = new File(cacheFileLoc);
-		if (!cacheFile.exists() || RipperMain.invalidateCache >= 1 || cacheFile.length() == 0) {
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		if (!cacheFile.exists() || cacheFile.length() == 0) {
+			long toWait = timeManager.getRemainingTime();
+			System.out.println("sleeping: " + toWait);
+			if (toWait > 0) {
+				Thread.sleep(toWait);
 			}
+			/*
+			 * try { Thread.sleep(2000); } catch (InterruptedException e) {
+			 * e.printStackTrace(); }
+			 */
 			// System.out.println("creating cache file");
 			cacheFile.createNewFile();
 			Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cacheFile), "UTF-8"));
@@ -70,6 +77,7 @@ public class KanjiMeaningRipper {
 			} finally {
 				out.close();
 			}
+			timeManager.releaseLock();
 		}
 		// System.out.println("reading cache file");
 

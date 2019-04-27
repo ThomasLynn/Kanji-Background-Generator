@@ -23,7 +23,7 @@ public class RipperMain {
 	// 1 = invalidate character cache, 
 	// 2 = invalidate cache 1 + sentence cache
 	// 3 = invalidate 1+2 cache + pitch cache
-	public static int invalidateCache = 0;
+	//public static int invalidateCache = 0;
 	//private static int poolSize = Runtime.getRuntime().availableProcessors();
 
 	// stems of info used. This determines what txt file to read and what folder to
