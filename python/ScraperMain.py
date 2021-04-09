@@ -27,17 +27,17 @@ def scrape_jisho_data(url):
     sentences = scrape_tatoeba_data(
         "https://tatoeba.org/eng/sentences/search?from=jpn&query="+urllib.parse.quote(kanji)+"&to=eng"
     )
+    print("sentences",sentences)
     
 def scrape_tatoeba_data(url):
     print("getting tatoeba url",url)
     soup = BeautifulSoup(get_web_data(url), 'html.parser')
     
     sections = soup.find_all("div",class_="sentence-and-translations md-whiteframe-1dp")
-    print("found",len(sections),"sections")
+    sentences = []
     for w in sections:
         string = re.sub(r'\\u([0-9a-fA-F]{4})',lambda m: chr(int(m.group(1),16)),w["ng-init"])
         japanese = re.search(r',"text":"(.*?)","lang":"jpn"', string).group(1)
-        print("japanese",japanese)
         
         # this is a really hacky way of doing this,
         # if anyone actually knows regex, please change this
@@ -45,8 +45,8 @@ def scrape_tatoeba_data(url):
         for i in range(len(english)):
             english[i] = english[i][::-1]
         english = list(set(english))
-        print("english", english)
-    return sections
+        sentences.append((japanese, english))
+    return sentences
     
     
 def scrape_list(jisho_list_filename):
