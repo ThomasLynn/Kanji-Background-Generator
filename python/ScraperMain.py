@@ -44,6 +44,7 @@ def scrape_tatoeba_data(url):
         english = re.findall(',"gne":"gnal","(.*?)":"txet"', string[::-1])
         for i in range(len(english)):
             english[i] = english[i][::-1]
+        english = list(set(english))
         print("english", english)
     return sections
     
