@@ -2,21 +2,28 @@ import requests
 from bs4 import BeautifulSoup
 from mezmorize import Cache
 
-cache = Cache(CACHE_TYPE='filesystem', CACHE_DIR='cache')
+cache = Cache(CACHE_TYPE='filesystem', CACHE_DIR='cache', CACHE_DEFAULT_TIMEOUT = 1e10)
     
 @cache.memoize()
 def get_jisho_data(url):
     page = requests.get(url)
-    return str(page.content)
+    print("encoding",page.encoding,page.apparent_encoding)
+    return str(page.text)
     
 def scrape_jisho_data(url):
     print("getting url",url)
     print("types",type(url),type(get_jisho_data(url)))
     soup = BeautifulSoup(get_jisho_data(url), 'html.parser')
-    results = soup.find(class_='kanji-details__main-meanings')
-    text = results.get_text()
-    text = text[2:].strip()[:-2]
-    print("results",text)
+    
+    kanji = soup.find(class_='character')
+    kanji = kanji.get_text()
+    print("kanji",kanji)
+    
+    meaning = soup.find(class_='kanji-details__main-meanings')
+    meaning = meaning.get_text()
+    meaning = meaning.strip()
+    print("meaning",meaning,".")
+    
     
 def scrape_list(jisho_list_filename):
     with open(jisho_list_filename) as f:
