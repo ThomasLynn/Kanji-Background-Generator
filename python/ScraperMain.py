@@ -3,6 +3,14 @@ from bs4 import BeautifulSoup
 from mezmorize import Cache
 import urllib.parse
 import re
+from ImageCreator import *
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-l","--list", default="lists/jisho_single.txt")
+args = parser.parse_args()
+print("args",args.list)
+list_filename = args.list
 
 cache = Cache(CACHE_TYPE='filesystem', CACHE_DIR='cache', CACHE_DEFAULT_TIMEOUT = 1e10)
     
@@ -14,20 +22,25 @@ def get_web_data(url):
 def scrape_jisho_data(url):
     print("getting jisho url",url)
     soup = BeautifulSoup(get_web_data(url), 'html.parser')
+    data = {}
     
     kanji = soup.find(class_='character')
     kanji = kanji.get_text()
-    print("kanji",kanji)
+    #print("kanji",kanji)
+    data['kanji'] = kanji
     
     meaning = soup.find(class_='kanji-details__main-meanings')
     meaning = meaning.get_text()
     meaning = meaning.strip()
-    print("meaning",meaning)
+    #print("meaning",meaning)
+    data['meaning'] = meaning
     
     sentences = scrape_tatoeba_data(
         "https://tatoeba.org/eng/sentences/search?from=jpn&query="+urllib.parse.quote(kanji)+"&to=eng"
     )
-    print("sentences",sentences)
+    #print("sentences",sentences)
+    data['sentences'] = sentences
+    return data
     
 def scrape_tatoeba_data(url):
     print("getting tatoeba url",url)
@@ -49,13 +62,17 @@ def scrape_tatoeba_data(url):
     return sentences
     
     
-def scrape_list(jisho_list_filename):
+def create_images_from_file(jisho_list_filename, image_creator):
     with open(jisho_list_filename) as f:
         urls = f.readlines()
         urls = [x.strip() for x in urls] 
         urls = [value for value in urls if value != ""]
     
     for w in urls:
-        scrape_jisho_data(w)
+        scraped_data = scrape_jisho_data(w)
+        image_creator.create_image(scraped_data)
     
-scrape_list("lists/jisho_single.txt")
+    
+if __name__ == "__main__":
+    image_creator = ImageCreator("ImageConfig.ini")
+    create_images_from_file(list_filename, image_creator)
