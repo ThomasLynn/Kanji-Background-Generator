@@ -7,10 +7,12 @@ from ImageCreator import *
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-l","--list", default="lists/jisho_single.txt")
+parser.add_argument("-list", default="lists/jisho_single.txt")
+parser.add_argument("-config", default="ImageConfig.ini")
 args = parser.parse_args()
 print("args",args.list)
 list_filename = args.list
+config_filename = args.config
 
 cache = Cache(CACHE_TYPE='filesystem', CACHE_DIR='cache', CACHE_DEFAULT_TIMEOUT = 1e10)
     
@@ -74,5 +76,5 @@ def create_images_from_file(jisho_list_filename, image_creator):
     
     
 if __name__ == "__main__":
-    image_creator = ImageCreator("ImageConfig.ini")
+    image_creator = ImageCreator(config_filename)
     create_images_from_file(list_filename, image_creator)
