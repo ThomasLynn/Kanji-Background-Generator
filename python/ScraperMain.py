@@ -5,6 +5,7 @@ import urllib.parse
 import re
 from ImageCreator import *
 import argparse
+from StringSimilarity import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-list", default="lists/jisho_single.txt")
@@ -42,6 +43,7 @@ def scrape_jisho_data(url):
     sentences = scrape_tatoeba_data(
         "https://tatoeba.org/eng/sentences/search?from=jpn&query="+urllib.parse.quote(kanji)+"&to=eng"
     )
+    sentences = sort_similar(sentences, lambda x:x[0])
     #print("sentences",sentences)
     data['sentences'] = sentences
     return data

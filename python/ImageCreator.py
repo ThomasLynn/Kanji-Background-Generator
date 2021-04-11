@@ -3,6 +3,7 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw 
 from pathlib import Path
+from StringSimilarity import *
 
 class ImageCreator:
     
@@ -115,6 +116,9 @@ class ImageCreator:
             
             try:
                 text_list = data['sentences'][text_number][1]
+                #print("text_list",text_list)
+                text_list = sort_similar(text_list)
+                #print("text_list2",text_list)
                 text = text_list[0]
                 for i in range(1,len(text_list)):
                     print("adding text",text_list[i])
@@ -123,7 +127,7 @@ class ImageCreator:
                         text = new_text
                     else:
                         break
-                print("adding text",text)
+                #print("adding text",text)
                 align = self.config.get(catagory,'align', fallback = "left")
                 offset = 0
                 text_width = font.getsize(text)[0]
