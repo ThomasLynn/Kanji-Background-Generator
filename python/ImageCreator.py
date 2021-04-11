@@ -19,7 +19,7 @@ class ImageCreator:
         img = Image.new('RGB', (x_size, y_size), color = color)
         draw = ImageDraw.Draw(img)
         
-        if bool(self.config.get('kanji','active', fallback = "false")):
+        if self.config.getboolean('kanji','active', fallback = False):
             x = float(self.config.get('kanji','x_position', fallback = "0.0")) * scale
             y = float(self.config.get('kanji','y_position', fallback = "0.0")) * scale
             font = self.config.get('kanji','font', fallback = "BIZ-UDGothicB.ttc")
@@ -29,5 +29,20 @@ class ImageCreator:
             color = self.config.get('kanji','text_color', fallback = "#ffffff")
             
             draw.text((int(x), int(y)),data['kanji'],color,font=font)
+            
+        i=0
+        while self.config.getboolean('japanese'+str(i),'active', fallback = False):
+            print("i",i)
+            catagory = 'japanese'+str(i)
+            x = float(self.config.get(catagory,'x_position', fallback = "0.0")) * scale
+            y = float(self.config.get(catagory,'y_position', fallback = "0.0")) * scale
+            font = self.config.get(catagory,'font', fallback = "BIZ-UDGothicB.ttc")
+            font_index = int(self.config.get(catagory,'font_index', fallback = "0"))
+            font_size = float(self.config.get(catagory,'font_relative_size', fallback = "10.0")) * scale
+            font = ImageFont.truetype(font = font, index = font_index, size = int(font_size))
+            color = self.config.get(catagory,'text_color', fallback = "#ffffff")
+            
+            draw.text((int(x), int(y)),data['sentences'][i][0],color,font=font)
+            i+=1
         
         img.save('images/'+str(data['kanji']+'.png'))
