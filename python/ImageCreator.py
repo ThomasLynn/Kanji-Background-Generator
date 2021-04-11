@@ -2,6 +2,7 @@ import configparser
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw 
+from pathlib import Path
 
 class ImageCreator:
     
@@ -9,8 +10,12 @@ class ImageCreator:
         self.config = configparser.ConfigParser()
         self.config.read(config_filename)
         
-    def create_image(self, data):
+    def create_image(self, data, output_folder):
         print("creating image from data",data)
+        
+        # create the output folder if it doesn't exist
+        Path(output_folder).mkdir(parents=True, exist_ok=True)
+        
         x_size = int(self.config.get('image','x_size', fallback = "300"))
         y_size = int(self.config.get('image','y_size', fallback = "300"))
         scale = y_size * 0.01
@@ -93,4 +98,4 @@ class ImageCreator:
                 break
             text_number+=1
         
-        img.save('images/'+str(data['kanji']+'.png'))
+        img.save(output_folder+'/'+str(data['kanji']+'.png'))

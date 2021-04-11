@@ -9,10 +9,12 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-list", default="lists/jisho_single.txt")
 parser.add_argument("-config", default="ImageConfig.ini")
+parser.add_argument("-out", default="images")
 args = parser.parse_args()
 print("args",args.list)
 list_filename = args.list
 config_filename = args.config
+output_folder = args.out
 
 cache = Cache(CACHE_TYPE='filesystem', CACHE_DIR='cache', CACHE_DEFAULT_TIMEOUT = 1e10)
     
@@ -64,7 +66,7 @@ def scrape_tatoeba_data(url):
     return sentences
     
     
-def create_images_from_file(jisho_list_filename, image_creator):
+def create_images_from_file(jisho_list_filename, image_creator, output_folder):
     with open(jisho_list_filename) as f:
         urls = f.readlines()
         urls = [x.strip() for x in urls] 
@@ -72,9 +74,9 @@ def create_images_from_file(jisho_list_filename, image_creator):
     
     for w in urls:
         scraped_data = scrape_jisho_data(w)
-        image_creator.create_image(scraped_data)
+        image_creator.create_image(scraped_data, output_folder)
     
     
 if __name__ == "__main__":
     image_creator = ImageCreator(config_filename)
-    create_images_from_file(list_filename, image_creator)
+    create_images_from_file(list_filename, image_creator, output_folder)
