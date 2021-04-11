@@ -32,12 +32,37 @@ class ImageCreator:
             font_size = float(self.config.get('kanji','font_relative_size', fallback = "10.0")) * scale
             font = ImageFont.truetype(font = font, index = font_index, size = int(font_size))
             color = self.config.get('kanji','text_color', fallback = "#ffffff")
+            align = self.config.get('kanji','align', fallback = "left")
+            offset = 0
+            text_width = font.getsize(data['kanji'])[0]
+            if align == "center":
+                offset = text_width/2
+            if align == "right":
+                offset = text_width
             
-            draw.text((int(x), int(y)),data['kanji'],color,font=font)
+            draw.text((int(x - offset), int(y)),data['kanji'],color,font=font, align = align)
+        
+        if self.config.getboolean('meaning','active', fallback = False):
+            x = float(self.config.get('meaning','x_position', fallback = "0.0")) * scale
+            y = float(self.config.get('meaning','y_position', fallback = "0.0")) * scale
+            font = self.config.get('meaning','font', fallback = "arial.ttf")
+            font_index = int(self.config.get('meaning','font_index', fallback = "0"))
+            font_size = float(self.config.get('meaning','font_relative_size', fallback = "10.0")) * scale
+            font = ImageFont.truetype(font = font, index = font_index, size = int(font_size))
+            color = self.config.get('meaning','text_color', fallback = "#ffffff")
+            align = self.config.get('meaning','align', fallback = "left")
+            offset = 0
+            text_width = font.getsize(data['meaning'])[0]
+            if align == "center":
+                offset = text_width/2
+            if align == "right":
+                offset = text_width
+            
+            draw.text((int(x - offset), int(y)),data['meaning'],color,font=font, align = align)
             
         default_x = self.config.get('japanese_default','x_position', fallback = "0.0")
         default_y = self.config.get('japanese_default','y_position', fallback = "0.0")
-        default_font = self.config.get('japanese_default','font', fallback = "BIZ-UDGothicB.ttc")
+        default_font = self.config.get('japanese_default','font', fallback = "meiryo.ttc")
         default_font_index = self.config.get('japanese_default','font_index', fallback = "0")
         default_font_size = self.config.get('japanese_default','font_relative_size', fallback = "10.0")
         default_color = self.config.get('japanese_default','text_color', fallback = "#ffffff")
@@ -53,9 +78,16 @@ class ImageCreator:
             font_size = float(self.config.get(catagory,'font_relative_size', fallback = default_font_size)) * scale
             font = ImageFont.truetype(font = font, index = font_index, size = int(font_size))
             color = self.config.get(catagory,'text_color', fallback = default_color)
+            align = self.config.get(catagory,'align', fallback = "left")
+            offset = 0
+            text_width = font.getsize(data['sentences'][text_number][0])[0]
+            if align == "center":
+                offset = text_width/2
+            if align == "right":
+                offset = text_width
             
             try:
-                draw.text((int(x), int(y)),data['sentences'][text_number][0],color,font=font)
+                draw.text((int(x - offset), int(y)),data['sentences'][text_number][0],color,font=font, align = align)
             except IndexError:
                 break
             text_number+=1
@@ -92,7 +124,14 @@ class ImageCreator:
                     else:
                         break
                 print("adding text",text)
-                draw.text((int(x), int(y)),text,color,font=font)
+                align = self.config.get(catagory,'align', fallback = "left")
+                offset = 0
+                text_width = font.getsize(text)[0]
+                if align == "center":
+                    offset = text_width/2
+                if align == "right":
+                    offset = text_width
+                draw.text((int(x - offset), int(y)),text,color,font=font)
             except IndexError:
                 print("index error, breaking")
                 break
